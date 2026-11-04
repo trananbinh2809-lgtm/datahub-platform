@@ -1,0 +1,6 @@
+{
+  "name": "DataHub — Nền tảng chuẩn hóa dữ liệu và cộng tác trực tuyến",
+  "description": "Nền tảng quản lý repository dữ liệu, chuẩn hóa và làm sạch dữ liệu tự động, quản lý phiên bản dataset và cộng tác trực tuyến theo thời gian thực.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
