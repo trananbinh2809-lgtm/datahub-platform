@@ -8,11 +8,13 @@ import type {
 
 export const apiRouter = Router();
 
-// Helper to authenticate request from Authorization Bearer token or cookie
+// Helper to authenticate request from Authorization Bearer token, query param, or cookie
 function getAuthenticatedUser(req: Request): (User & { passwordHash?: string }) | null {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return null;
-  const token = authHeader.replace(/^Bearer\s+/, '').trim();
+  let token = authHeader ? authHeader.replace(/^Bearer\s+/, '').trim() : '';
+  if (!token && req.query.token) {
+    token = String(req.query.token).trim();
+  }
   if (!token) return null;
   
   // In our lightweight token format: userId:timestamp:signature

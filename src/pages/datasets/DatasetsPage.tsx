@@ -159,6 +159,30 @@ export const DatasetsPage: React.FC = () => {
     }
   };
 
+  const handleDownloadCsv = async (dataset: Dataset) => {
+    try {
+      const token = localStorage.getItem('datahub_token');
+      const baseUrl = (import.meta.env.VITE_API_URL as string) || '/api';
+      const res = await fetch(`${baseUrl}/datasets/${dataset.id}/download`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) {
+        throw new Error('Không thể tải file CSV. Vui lòng kiểm tra phiên đăng nhập.');
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${dataset.name.replace(/[^a-zA-Z0-9_-]/g, '_')}_${dataset.currentVersionTag}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err: any) {
+      alert(err.message || 'Lỗi khi tải xuống CSV');
+    }
+  };
+
   if (loading) return <LoadingSpinner text="Đang tải danh sách tập dữ liệu..." />;
 
   const columns = previewRows.length > 0 ? Object.keys(previewRows[0]) : [];
@@ -252,14 +276,14 @@ export const DatasetsPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <a
-                    href={`${(import.meta.env.VITE_API_URL as string) || '/api'}/datasets/${selectedDataset.id}/download`}
-                    download
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors"
+                  <button
+                    type="button"
+                    onClick={() => handleDownloadCsv(selectedDataset)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Xuất CSV</span>
-                  </a>
+                  </button>
 
                   <Link to={`/normalization?datasetId=${selectedDataset.id}`}>
                     <Button variant="primary" size="sm" leftIcon={<Wand2 className="w-3.5 h-3.5" />}>
