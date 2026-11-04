@@ -66,7 +66,7 @@ export const ChatPage: React.FC = () => {
 
   // Setup Server-Sent Events (SSE) for Real-Time Messages
   useEffect(() => {
-    const eventSource = new EventSource('/api/chat/stream');
+    const eventSource = new EventSource(`${(import.meta.env.VITE_API_URL as string) || '/api'}/chat/stream`);
 
     eventSource.addEventListener('chat_message', (e) => {
       try {

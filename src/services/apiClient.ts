@@ -1,7 +1,7 @@
 import type { ApiResponse } from '../types/index.js';
 
 class ApiClient {
-  private baseUrl: string = '/api';
+  private baseUrl: string = (import.meta.env.VITE_API_URL as string) || '/api';
 
   private getToken(): string | null {
     return localStorage.getItem('datahub_token');

@@ -253,7 +253,7 @@ export const DatasetsPage: React.FC = () => {
 
                 <div className="flex items-center gap-2 shrink-0">
                   <a
-                    href={`/api/datasets/${selectedDataset.id}/download`}
+                    href={`${(import.meta.env.VITE_API_URL as string) || '/api'}/datasets/${selectedDataset.id}/download`}
                     download
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors"
                   >
